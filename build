@@ -1,0 +1,21 @@
+#!/usr/bin/env bbb
+
+assets/less/%.less => dist/css/%.css
+  mkdir -p `dirname $1`
+  lessc $INPUT > $1
+
+assets/jsx/%.jsx => dist/js/%.js
+  mkdir -p `dirname $1`
+  babel $INPUT > $1
+
+vendor/%.js => dist/js/%.js
+  cp $INPUT $1
+
+vendor/%.css => dist/css/%.css
+  cp $INPUT $1
+
+assets/index.html => dist/index.html
+  cp $INPUT $1
+
+dist/css/%.css => dist/index.html
+dist/js/%.js   => dist/index.html

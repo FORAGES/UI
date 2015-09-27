@@ -1,0 +1,6 @@
+#!/usr/bin/env bbb
+
+Dockerfile => jemc/forages-ui
+  make -C vendor
+  ./build
+  docker build -t $1 .
