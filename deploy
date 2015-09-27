@@ -5,9 +5,10 @@ repo=FORAGES.github.io
 
 make -C ./vendor
 ./build
+./build-min
 
 rm -rf "${repo}"
-cp -r dist "${repo}"
+cp -r dist-min "${repo}"
 
 cd "${repo}"
 git init

@@ -1,0 +1,13 @@
+#!/usr/bin/env bbb
+
+dist/css/%.css => dist-min/css/%.css
+  mkdir -p `dirname $1`
+  minify --output $1 $INPUT
+
+dist/js/%.js   => dist-min/js/%.js
+  mkdir -p `dirname $1`
+  minify --output $1 $INPUT
+
+dist/index.html => dist-min/index.html
+  mkdir -p `dirname $1`
+  cp $INPUT $1
