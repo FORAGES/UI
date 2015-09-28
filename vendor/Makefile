@@ -4,8 +4,13 @@ REACT_VERSION=0.13.3
 POUCHDB_VERSION=4.0.3
 LEAFLET_VERSION=0.7.5
 
-all:    jquery react pouchdb leaflet
-.PHONY: jquery react pouchdb leaflet
+all:    fonts jquery react pouchdb leaflet
+.PHONY: fonts jquery react pouchdb leaflet
+
+fonts: LiberationSerif-Regular.ttf
+
+LiberationSerif-Regular.ttf:
+	cp /usr/share/fonts/liberation/LiberationSerif-Regular.ttf $@ # TODO: be more robust than this.
 
 jquery: jquery-${JQUERY_VERSION}.min.js
 

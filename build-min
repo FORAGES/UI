@@ -1,12 +1,17 @@
 #!/usr/bin/env bbb
 
-dist/css/%.css => dist-min/css/%.css
-  mkdir -p `dirname $1`
-  minify --output $1 $INPUT
-
 dist/js/%.js   => dist-min/js/%.js
   mkdir -p `dirname $1`
   minify --output $1 $INPUT
+
+dist/css/%.css => dist-min/css/%.css x
+  mkdir -p `dirname $1`
+  minify --output $1 $INPUT
+  sed -i 's|\.\./\.\./dist/css/||g' $1 # hack for minify's undue interference.
+
+dist/css/%.ttf => dist-min/css/%.ttf
+  mkdir -p `dirname $1`
+  cp $INPUT $1
 
 dist/index.html => dist-min/index.html
   mkdir -p `dirname $1`
