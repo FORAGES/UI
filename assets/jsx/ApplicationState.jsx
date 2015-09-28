@@ -2,8 +2,11 @@
 var ApplicationState = {
   defaults: function() {
     return {
-      mode: "explore",
-      invert: false,
+      mode:    "explore",
+      invert:  false,
+      mapLat:  "48.5",
+      mapLon:  "-122.0",
+      mapZoom: "8",
     }
   },
   
@@ -16,8 +19,11 @@ var ApplicationState = {
       var key   = param_parts[0]
       var value = param_parts[1]
       
-      if     (key === "mode")   state["mode"]   = value
-      else if(key === "invert") state["invert"] = value != 0
+      if     (key === "mode")    state["mode"]    = value
+      else if(key === "invert")  state["invert"]  = value != 0
+      else if(key === "mapLat")  state["mapLat"]  = value
+      else if(key === "mapLon")  state["mapLon"]  = value
+      else if(key === "mapZoom") state["mapZoom"] = value
     }
     
     return state
@@ -25,7 +31,10 @@ var ApplicationState = {
   
   save: function(state) {
     var params = {
-      mode: state.mode
+      mode:    state.mode,
+      mapLat:  state.mapLat,
+      mapLon:  state.mapLon,
+      mapZoom: state.mapZoom
     }
     
     if(state.invert) params["invert"] = 1

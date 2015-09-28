@@ -1,5 +1,7 @@
 
 var Map = React.createClass({
+  contextTypes: { main: React.PropTypes.any.isRequired },
+  
   componentDidMount: function () {
     this.createMap()
   },
@@ -47,7 +49,21 @@ var Map = React.createClass({
     layers["OpenStreetMap"].addTo(this.map)
     
     // Set the starting location.
-    this.map.setView([this.props.lat, this.props.lon], this.props.zoom)
+    var mainState = this.context.main.state
+    this.map.setView([mainState.mapLat, mainState.mapLon], mainState.mapZoom)
+    
+    // Set up event handler hooks.
+    this.map.on('moveend', this.onMoveEnd)
+  },
+  
+  onMoveEnd: function(e) {
+    var center = e.target.getCenter()
+    
+    this.context.main.setState({
+      mapLat:  center.lat,
+      mapLon:  center.lng,
+      mapZoom: e.target.getZoom()
+    })
   },
   
   render: function () {
