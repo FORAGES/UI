@@ -30,30 +30,43 @@ var Map = React.createClass({
       })
     }
     
-    var layers = {
-      "OpenStreetMap": layer_osm(),
-      "Satellite":     layer_mapquest_sat(),
-      "OpenCycleMap":  layer_thunderforest("cycle"),
-      "Outdoors":      layer_thunderforest("outdoors"),
-      "Landscape":     layer_thunderforest("landscape"),
-      "Transport":     layer_thunderforest("transport"),
-      "TransportDark": layer_thunderforest("transport-dark"),
+    this.layers = {
+      "default":   layer_osm(),
+      "sat":       layer_mapquest_sat(),
+      "cycle":     layer_thunderforest("cycle"),
+      "outdoors":  layer_thunderforest("outdoors"),
+      "landscape": layer_thunderforest("landscape"),
+      "transport": layer_thunderforest("transport"),
     }
     
-    var overlays = {}
+    for (name in this.layers)
+      this.layers[name].shortName = name
+    
+    var layersArg = {
+      "OpenStreetMap": this.layers["default"],
+      "Satellite":     this.layers["sat"],
+      "OpenCycleMap":  this.layers["cycle"],
+      "Outdoors":      this.layers["outdoors"],
+      "Landscape":     this.layers["landscape"],
+      "Transport":     this.layers["transport"],
+    }
+    
+    var appState = this.context.main.state
+    
+    var overlaysArg = {}
     
     // Add a control to switch layers.
-    L.control.layers(layers, overlays).addTo(this.map)
+    L.control.layers(layersArg, overlaysArg).addTo(this.map)
     
     // Use OpenStreetMap as the default layer.
-    layers["OpenStreetMap"].addTo(this.map)
+    this.layers[appState.mapLayer].addTo(this.map)
     
     // Set the starting location.
-    var mainState = this.context.main.state
-    this.map.setView([mainState.mapLat, mainState.mapLon], mainState.mapZoom)
+    this.map.setView([appState.mapLat, appState.mapLon], appState.mapZoom)
     
     // Set up event handler hooks.
-    this.map.on('moveend', this.onMoveEnd)
+    this.map.on('moveend',         this.onMoveEnd)
+    this.map.on('baselayerchange', this.onBaseLayerChange)
   },
   
   onMoveEnd: function(e) {
@@ -64,6 +77,10 @@ var Map = React.createClass({
       mapLon:  center.lng,
       mapZoom: e.target.getZoom()
     })
+  },
+  
+  onBaseLayerChange: function(e) {
+    this.context.main.setState({ mapLayer: e.layer.shortName })
   },
   
   render: function () {
