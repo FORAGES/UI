@@ -1,10 +1,11 @@
 
 JQUERY_VERSION=2.1.4
 REACT_VERSION=0.13.3
+POUCHDB_VERSION=4.0.3
 LEAFLET_VERSION=0.7.5
 
-all:    jquery react leaflet
-.PHONY: jquery react leaflet
+all:    jquery react pouchdb leaflet
+.PHONY: jquery react pouchdb leaflet
 
 jquery: jquery-${JQUERY_VERSION}.min.js
 
@@ -15,6 +16,11 @@ react: react-${REACT_VERSION}.js
 
 react-${REACT_VERSION}.js:
 	wget -O $@ https://fb.me/react-${REACT_VERSION}.js
+
+pouchdb: pouchdb-${POUCHDB_VERSION}.min.js
+
+pouchdb-${POUCHDB_VERSION}.min.js:
+	wget https://github.com/pouchdb/pouchdb/releases/download/${POUCHDB_VERSION}/pouchdb-${POUCHDB_VERSION}.min.js
 
 leaflet: leaflet-${LEAFLET_VERSION}.js leaflet-${LEAFLET_VERSION}.css
 
