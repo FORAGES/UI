@@ -26,6 +26,9 @@ var MenuDrawer = React.createClass({
         <span className="ddim">{" ⇝ "}</span>
         <a href="javascript:void(0)" onClick={this.onClickRightward}>{"⚝"}</a>
       </h2>
+      <div style={{ position: "absolute", top: 0, right: 20 }}>
+        <h2><a href="javascript:void(0)" onClick={this.onClickInvert}>{"Ω"}</a></h2>
+      </div>
     </div>)
   }
 })
