@@ -17,15 +17,15 @@ var MenuDrawer = React.createClass({
   render: function() {
     return (<div style={{ width: "100vw" }}>
       <div style={{ position: "absolute", top: 0, left: 20 }}>
-        <h1><a href="javascript:void(0)" onClick={this.onClickInvert}>{"☯"}</a></h1>
+        <h2><a href="javascript:void(0)" onClick={this.onClickInvert}>{"☯"}</a></h2>
       </div>
-      <h1>
+      <h2>
         <a href="javascript:void(0)" onClick={this.onClickLeftward}>{"⚝"}</a>
         <span className="ddim">{" ⇜ "}</span>
         <span className="dim">E X P</span>{" "} L O R E
         <span className="ddim">{" ⇝ "}</span>
         <a href="javascript:void(0)" onClick={this.onClickRightward}>{"⚝"}</a>
-      </h1>
+      </h2>
     </div>)
   }
 })
