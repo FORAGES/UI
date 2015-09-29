@@ -1,8 +1,8 @@
 #!/usr/bin/env bbb
 
-assets/less/%.less => dist/css/%.css
+assets/styl/%.styl => dist/css/%.css
   mkdir -p `dirname $1`
-  lessc $INPUT > $1
+  stylus < $INPUT | postcss --use autoprefixer > $1
 
 assets/jsx/%.jsx => dist/js/index.js
   mkdir -p `dirname $1`
