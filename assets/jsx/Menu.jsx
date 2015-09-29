@@ -24,7 +24,7 @@ var Menu = React.createClass({
   
   render: function() {
     return (<div className="menu" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-      <Menu.Title texts={["F O R ","A G E S"]} active={!this.state.drawerActive}/>
+      <Menu.Title texts={["F O R","A G E S"]} active={!this.state.drawerActive}/>
       {this.render_hint()}
       {this.render_drawer()}
     </div>)
@@ -37,19 +37,19 @@ var Menu = React.createClass({
                           position: "absolute",
                           transition: "opacity 1.25s, top 0.5s" }}>
       <Menu.Spacer width="1em" />
-      <Menu.Icon text={"☯"} name="invert" callback={this.onIconEvent} />
+      <Menu.Icon text={"☯"} name="inverse" callback={this.onIconEvent} />
       <Menu.Spacer />
       
       <Menu.Icon text={"⚝"} name="research" callback={this.onIconEvent} />
       <Menu.Spacer width="0.5em" />
       <Menu.Icon text={"⇜"} />
-      <Menu.Spacer width="1.0em" />
+      <Menu.Spacer width="0.5em" />
       
       <div style={{ flex: "0 0 auto" }}>
-        <Menu.Title texts={["E X P ","L O R E"]} active={!this.state.hintActive}/>
+        <Menu.Title texts={["E X P","L O R E"]} active={!this.state.hintActive}/>
       </div>
       
-      <Menu.Spacer width="1.0em" />
+      <Menu.Spacer width="0.5em" />
       <Menu.Icon text={"⇝"} />
       <Menu.Spacer width="0.5em" />
       <Menu.Icon text={"⚝"} name="recollect" callback={this.onIconEvent} />
@@ -62,10 +62,10 @@ var Menu = React.createClass({
   
   render_hint: function() {
     var hint_texts = []
-    if      (this.state.hint === "invert")    hint_texts = ["", "I N", " V E R T"]
-    else if (this.state.hint === "research")  hint_texts = ["R E ", "S E A R C H"]
-    else if (this.state.hint === "recollect") hint_texts = ["R E ", "C O L L E C T"]
-    else if (this.state.hint === "logout")    hint_texts = ["L O G ", "O U T"]
+    if      (this.state.hint === "inverse")   hint_texts = ["I N", "V E R S E"]
+    else if (this.state.hint === "research")  hint_texts = ["R E", "S E A R C H"]
+    else if (this.state.hint === "recollect") hint_texts = ["R E", "C O L L E C T"]
+    else if (this.state.hint === "logout")    hint_texts = ["L O G", "O U T"]
     
     return (<div style={{ width: "100vw", display: "flex",
                           opacity: this.state.hintActive ? 1 : 0,
@@ -114,14 +114,30 @@ Menu.Title = React.createClass({
   render: function() {
     var texts = this.props.texts || []
     
-    return (<div className="title"
-                 style={{ opacity: this.props.active ? 1 : 0,
-                          transition: "opacity 1.25s" }}>
-      <h2>
-        <span className="dim">{texts[0]}</span>
-        {texts[1]}
-        <span className="dim">{texts[2]}</span>
-      </h2>
-    </div>)
+    var divs = []
+    var dim = true
+    for (var i in texts) {
+      var text = texts[i]
+      if (text.length > 0) {
+        var chars = texts[i].split(" ")
+        for (var j in chars) {
+          var key = "-" + i + "-" + j // Each child needs a unique deterministic key.
+          divs.push(<h2 key={key} className={dim ? "dim" : ""}>{chars[j]}</h2>)
+        }
+      }
+      dim = !dim
+    }
+    
+    return (
+      <div style={{ opacity: this.props.active ? 1 : 0,
+                    transition: "opacity 1.25s",
+                    width: "100%", display: "flex",
+                    justifyContent: "center" }}>
+        <div style={{ width: "12em", display: "flex",
+                      justifyContent: "space-between" }}>
+          {divs}
+        </div>
+      </div>
+    )
   }
 })
