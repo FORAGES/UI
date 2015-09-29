@@ -8,9 +8,7 @@ var Main = React.createClass({
   render: function() {
     ApplicationState.save(this.state)
     
-    return (<div id="main" style={{
-      filter: this.state.invert ? "invert(100%)" : "invert(0%)",
-    }}>
+    return (<div id="main" className={this.state.invert ? "inverted" : ""}>
       <Menu />
       <Map />
     </div>)
