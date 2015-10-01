@@ -9,8 +9,10 @@ var Main = React.createClass({
     ApplicationState.save(this.state)
     
     return (<div id="main" className={this.state.invert ? "inverted" : ""}>
-      <Menu />
-      <Map />
+      <div id="main-content" className={this.state.modalBlur ? "blurred" : ""}>
+        <Menu />
+        <Map />
+      </div>
     </div>)
   }
 })

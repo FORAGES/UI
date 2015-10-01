@@ -12,7 +12,11 @@ var Menu = React.createClass({
   
   onIconEvent: function(name, e) {
     if (e.type == "click") {
-      this.context.main.setState({ invert: !this.context.main.state.invert })
+      if (name == "inverse")
+        this.context.main.setState({ invert: !this.context.main.state.invert })
+      else
+      if (name == "logout")
+        this.context.main.setState({ modalBlur: !this.context.main.state.modalBlur })
     }
     else
     if (e.type == "mouseover")

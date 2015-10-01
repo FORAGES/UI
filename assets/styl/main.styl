@@ -7,16 +7,18 @@
   font-family: foragesFont
 }
 
-html, body, #wrapper, #main {
+html, body, #wrapper, #main, #main-content {
   height: 100%
   min-height: 100% !important
   margin: 0
 }
 
 #main {
+  background-color: #FFFFFF
+}
+#main-content {
   display: flex
   flex-direction: column
-  background-color: #FFFFFF
 }
 
 h1, h2 { text-align: center }
@@ -27,6 +29,7 @@ a:hover, a:active { color: #FFAA44; text-decoration: none }
 .dim      { opacity: 0.5 }
 .ddim     { opacity: 0.25 }
 .inverted { filter: invert(100%) }
+.blurred  { filter: blur(0.2em); opacity: 0.75 }
 
 .map {
   display: flex

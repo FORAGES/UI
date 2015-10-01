@@ -8,6 +8,8 @@ var ApplicationState = {
       mapLon:   "-122.0",
       mapZoom:  "8",
       mapLayer: "default",
+      // Not saved to URL:
+      modalBlur: false,
     }
   },
   
