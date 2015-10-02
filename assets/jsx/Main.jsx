@@ -8,11 +8,16 @@ var Main = React.createClass({
   render: function() {
     ApplicationState.save(this.state)
     
+    var modal = null
+    if      (this.state.modalLogIn)  modal = <Modal.LogIn/>
+    else if (this.state.modalLogOut) modal = <Modal.LogOut/>
+    
     return (<div id="main" className={this.state.invert ? "inverted" : ""}>
-      <div id="main-content" className={this.state.modalBlur ? "blurred" : ""}>
+      <div id="main-content" className={modal ? "blurred" : ""}>
         <Menu />
         <Map />
       </div>
+      {modal}
     </div>)
   }
 })

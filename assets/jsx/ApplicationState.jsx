@@ -9,7 +9,9 @@ var ApplicationState = {
       mapZoom:  "8",
       mapLayer: "default",
       // Not saved to URL:
-      modalBlur: false,
+      loggedIn:    false,
+      modalLogIn:  true,
+      modalLogOut: false,
     }
   },
   

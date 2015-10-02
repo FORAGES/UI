@@ -15,8 +15,11 @@ var Menu = React.createClass({
       if (name == "inverse")
         this.context.main.setState({ invert: !this.context.main.state.invert })
       else
+      if (name == "login")
+        this.context.main.setState({ modalLogIn: true })
+      else
       if (name == "logout")
-        this.context.main.setState({ modalBlur: !this.context.main.state.modalBlur })
+        this.context.main.setState({ modalLogOut: true })
     }
     else
     if (e.type == "mouseover")
@@ -59,7 +62,9 @@ var Menu = React.createClass({
       <Menu.Icon text={"⚝"} name="recollect" callback={this.onIconEvent} />
       
       <Menu.Spacer />
-      <Menu.Icon text={"Ω"} name="logout" callback={this.onIconEvent} />
+      {this.context.main.state.loggedIn ?
+        <Menu.Icon text={"Ω"} name="logout" callback={this.onIconEvent} /> :
+        <Menu.Icon text={"Å"} name="login"  callback={this.onIconEvent} />}
       <Menu.Spacer width="1em" />
     </div>)
   },
@@ -70,6 +75,7 @@ var Menu = React.createClass({
     else if (this.state.hint === "research")  hint_texts = ["R E", "S E A R C H"]
     else if (this.state.hint === "recollect") hint_texts = ["R E", "C O L L E C T"]
     else if (this.state.hint === "logout")    hint_texts = ["L O G", "O U T"]
+    else if (this.state.hint === "login")     hint_texts = [" L O G", "I N "]
     
     return (<div style={{ width: "100vw", display: "flex",
                           opacity: this.state.hintActive ? 1 : 0,
