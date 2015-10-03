@@ -13,6 +13,7 @@ var Main = React.createClass({
     else if (this.state.modalLogOut) modal = <Modal.LogOut/>
     
     return (<div id="main" className={this.state.invert ? "inverted" : ""}>
+      <Session ref="session" />
       <div id="main-content" className={modal ? "blurred" : ""}>
         <Menu />
         <Map />
