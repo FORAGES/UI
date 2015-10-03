@@ -13,20 +13,20 @@ fonts: LiberationSerif-Regular.ttf
 LiberationSerif-Regular.ttf:
 	cp /usr/share/fonts/liberation/LiberationSerif-Regular.ttf $@ # TODO: be more robust than this.
 
-jquery: jquery-${JQUERY_VERSION}.min.js
+jquery: jquery-${JQUERY_VERSION}.js
 
-jquery-${JQUERY_VERSION}.min.js:
-	wget -O $@ http://code.jquery.com/jquery-${JQUERY_VERSION}.min.js
+jquery-${JQUERY_VERSION}.js:
+	wget -O $@ http://code.jquery.com/jquery-${JQUERY_VERSION}.js
 
 react: react-${REACT_VERSION}.js
 
 react-${REACT_VERSION}.js:
 	wget -O $@ https://fb.me/react-${REACT_VERSION}.js
 
-pouchdb: pouchdb-${POUCHDB_VERSION}.min.js pouchdb-authentication-${POUCHDB_AUTH_VERSION}.js
+pouchdb: pouchdb-${POUCHDB_VERSION}.js pouchdb-authentication-${POUCHDB_AUTH_VERSION}.js
 
-pouchdb-${POUCHDB_VERSION}.min.js:
-	wget -O $@ https://github.com/pouchdb/pouchdb/releases/download/${POUCHDB_VERSION}/pouchdb-${POUCHDB_VERSION}.min.js
+pouchdb-${POUCHDB_VERSION}.js:
+	wget -O $@ https://github.com/pouchdb/pouchdb/releases/download/${POUCHDB_VERSION}/pouchdb-${POUCHDB_VERSION}.js
 
 pouchdb-authentication-${POUCHDB_AUTH_VERSION}.js:
 	wget -O $@ https://raw.githubusercontent.com/nolanlawson/pouchdb-authentication/v${POUCHDB_AUTH_VERSION}/dist/pouchdb.authentication.js
