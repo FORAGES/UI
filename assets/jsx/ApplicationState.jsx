@@ -10,7 +10,7 @@ var ApplicationState = {
       mapLayer: "default",
       // Not saved to URL:
       loggedIn:    false,
-      modalLogIn:  true,
+      modalLogIn:  false,
       modalLogOut: false,
     }
   },
