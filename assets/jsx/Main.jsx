@@ -1,11 +1,11 @@
 
 var Main = React.createClass({
-  getInitialState: function() { return ApplicationState.initial() },
+  getInitialState() { return ApplicationState.initial() },
   
   childContextTypes: { main: React.PropTypes.any.isRequired },
-  getChildContext: function() { return { main: this } },
+  getChildContext() { return { main: this } },
   
-  render: function() {
+  render() {
     ApplicationState.save(this.state)
     
     var modal = null

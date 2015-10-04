@@ -4,7 +4,7 @@ var Modal = {}
 Modal.LogIn = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
-  onLogIn: function(e) {
+  onLogIn(e) {
     e.preventDefault()
     
     var usernameNode = React.findDOMNode(this.refs.username)
@@ -12,21 +12,21 @@ Modal.LogIn = React.createClass({
     
     var main = this.context.main
     
-    main.refs.session.logIn(usernameNode.value, passwordNode.value, function() {
+    main.refs.session.logIn(usernameNode.value, passwordNode.value, ()=> {
       // On success, hide the dialog and mark as logged in.
       main.setState({ modalLogIn: false, loggedIn: true })
-    }, function(error) {
+    }, error => {
       // On error, reset the fields to indicate the user should try again.
       usernameNode.value = ""
       passwordNode.value = ""
     })
   },
   
-  onCancel: function(e) {
+  onCancel(e) {
     this.context.main.setState({ modalLogIn: false })
   },
   
-  render: function() {
+  render() {
     return (<div className="modal-suspension">
       <div className="dialog-box">
         <div className="dialog-header-div">
@@ -48,16 +48,16 @@ Modal.LogIn = React.createClass({
 Modal.LogOut = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
-  onLogOut: function(e) {
+  onLogOut(e) {
     this.context.main.refs.session.logOut()
     this.context.main.setState({ modalLogOut: false })
   },
   
-  onCancel: function(e) {
+  onCancel(e) {
     this.context.main.setState({ modalLogOut: false })
   },
   
-  render: function() {
+  render() {
     return (<div className="modal-suspension">
       <div className="dialog-box">
         <div className="dialog-header-div">

@@ -1,6 +1,6 @@
 
 var ApplicationState = {
-  defaults: function() {
+  defaults() {
     return {
       mode:     "explore",
       invert:   false,
@@ -15,7 +15,7 @@ var ApplicationState = {
     }
   },
   
-  initial: function(state) {
+  initial(state) {
     var state = this.defaults()
     var param_list = window.location.search.slice(0).substring(1).split("&")
     
@@ -35,7 +35,7 @@ var ApplicationState = {
     return state
   },
   
-  save: function(state) {
+  save(state) {
     var params = {
       mode:    state.mode,
       mapLat:  state.mapLat,

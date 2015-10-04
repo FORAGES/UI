@@ -2,33 +2,30 @@
 var Map = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
-  componentDidMount: function () {
+  componentDidMount() {
     this.createMap()
   },
   
-  createMap: function (element) {
+  createMap(element) {
     this.map = L.map(this.getDOMNode(), { doubleClickZoom: false })
     
-    var layer_osm = function (name) {
-      return L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    var layer_osm = name =>
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
       })
-    }
     
-    var layer_thunderforest = function (name) {
-      return L.tileLayer('http://{s}.tile.thunderforest.com/'+name+'/{z}/{x}/{y}.png', {
+    var layer_thunderforest = name =>
+      L.tileLayer('http://{s}.tile.thunderforest.com/'+name+'/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       })
-    }
     
-    var layer_mapquest_sat = function (name) {
-      return L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+    var layer_mapquest_sat = name =>
+      L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
         type: 'sat',
         ext: 'jpg',
         attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
         subdomains: '1234'
       })
-    }
     
     this.layers = {
       "default":   layer_osm(),
@@ -69,7 +66,7 @@ var Map = React.createClass({
     this.map.on('baselayerchange', this.onBaseLayerChange)
   },
   
-  onMoveEnd: function(e) {
+  onMoveEnd(e) {
     var center = e.target.getCenter()
     
     this.context.main.setState({
@@ -79,11 +76,11 @@ var Map = React.createClass({
     })
   },
   
-  onBaseLayerChange: function(e) {
+  onBaseLayerChange(e) {
     this.context.main.setState({ mapLayer: e.layer.shortName })
   },
   
-  render: function () {
+  render() {
     return (<div className="map"></div>)
   }
 })

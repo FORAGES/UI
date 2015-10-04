@@ -2,15 +2,15 @@
 var Menu = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
-  getInitialState: function() { return {
+  getInitialState() { return {
     drawerActive: false,
     hintActive:   false,
   }},
   
-  onMouseOver: function(event) { this.setState({ drawerActive: true }) },
-  onMouseOut:  function(event) { this.setState({ drawerActive: false }) },
+  onMouseOver(event) { this.setState({ drawerActive: true }) },
+  onMouseOut(event) { this.setState({ drawerActive: false }) },
   
-  onIconEvent: function(name, e) {
+  onIconEvent(name, e) {
     if (e.type == "click") {
       if (name == "inverse")
         this.context.main.setState({ invert: !this.context.main.state.invert })
@@ -29,7 +29,7 @@ var Menu = React.createClass({
       this.setState({ hintActive: false })
   },
   
-  render: function() {
+  render() {
     return (<div className="menu" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
       <Menu.Title texts={["F O R","A G E S"]} active={!this.state.drawerActive}/>
       {this.render_hint()}
@@ -37,7 +37,7 @@ var Menu = React.createClass({
     </div>)
   },
   
-  render_drawer: function() {
+  render_drawer() {
     return (<div style={{ width: "100vw", display: "flex",
                           opacity: this.state.drawerActive ? 1 : 0,
                           top: this.state.drawerActive ? 0 : -100,
@@ -69,7 +69,7 @@ var Menu = React.createClass({
     </div>)
   },
   
-  render_hint: function() {
+  render_hint() {
     var hint_texts = []
     if      (this.state.hint === "inverse")   hint_texts = ["I N", "V E R S E"]
     else if (this.state.hint === "research")  hint_texts = ["R E", "S E A R C H"]
@@ -90,7 +90,7 @@ var Menu = React.createClass({
 })
 
 Menu.Spacer = React.createClass({
-  render: function() {
+  render() {
     if (this.props.width)
       return (<div style={{ flex: "0 1 "+this.props.width }}></div>)
     else // Grow to all available width (split evenly with other growing items)
@@ -99,12 +99,12 @@ Menu.Spacer = React.createClass({
 })
 
 Menu.Icon = React.createClass({
-  callbackWrapper: function(e) {
+  callbackWrapper(e) {
     e.preventDefault()
     this.props.callback(this.props.name, e)
   },
   
-  render: function() {
+  render() {
     var content = (<h2><span className="ddim">{this.props.text}</span></h2>)
     
     if (this.props.callback)
@@ -121,7 +121,7 @@ Menu.Icon = React.createClass({
 })
 
 Menu.Title = React.createClass({
-  render: function() {
+  render() {
     var texts = this.props.texts || []
     
     var divs = []

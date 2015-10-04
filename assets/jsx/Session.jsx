@@ -1,14 +1,14 @@
 
 var Session = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
-  getInitialState: function() { return {
+  getInitialState() { return {
     remoteDB: null,
   }},
   
   dbUrl(name)    { return "http://forages-db.ilvain.com:5984/" + name },
   dbCreate(name) { return new PouchDB(this.dbUrl(name), { skipSetup: true }) },
   
-  logIn: function(username, password, onSuccess, onError) {
+  logIn(username, password, onSuccess, onError) {
     var appName = "forages"
     
     // Log in to central _users database.
@@ -33,12 +33,12 @@ var Session = React.createClass({
     })
   },
   
-  logOut: function() {
+  logOut() {
     if (this.state.remoteDB)
       this.state.remoteDB.logout()
     
     this.context.main.setState({ loggedIn: false })
   },
   
-  render: function() { return null }
+  render() { return null }
 })
