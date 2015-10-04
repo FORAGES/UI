@@ -2,7 +2,8 @@
 var Session = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   getInitialState() { return {
-    remoteDB: null,
+    remotePublicDB: null,
+    remoteDB:       null,
   }},
   
   dbUrl(name)    { return "http://forages-db.ilvain.com:5984/" + name },
@@ -11,15 +12,18 @@ var Session = React.createClass({
   logIn(username, password, onSuccess, onError) {
     var appName = "forages"
     
-    // Log in to central _users database.
-    var usersDB = this.dbCreate("_users")
-    usersDB.login(username, password).then(user => {
-      // Get user info for this user from the _users database.
-      return usersDB.get("org.couchdb.user:" + username).then(userInfo => {
+    // Log in to the public database for this application.
+    var publicDB = this.dbCreate(appName + "_public")
+    publicDB.logIn(username, password).then(user => {
+      // Save the public database handle.
+      this.setState({ remotePublicDB: publicDB })
+      
+      // Get user info for this user.
+      return publicDB.getUser(username).then(userInfo => {
         // Log in to this user's private database for this application.
         var privateDB = this.dbCreate(userInfo[appName].dbname)
-        return privateDB.login(username, password).then(user => {
-          // Save the database handle and mark as logged in.
+        return privateDB.logIn(username, password).then(user => {
+          // Save the private database handle and mark as logged in.
           this.setState({ remoteDB: privateDB })
           this.context.main.setState({ loggedIn: true })
           
@@ -34,8 +38,13 @@ var Session = React.createClass({
   },
   
   logOut() {
-    if (this.state.remoteDB)
-      this.state.remoteDB.logout()
+    if (this.state.remotePublicDB) this.state.remotePublicDB.logOut()
+    if (this.state.remoteDB)       this.state.remoteDB.logOut()
+    
+    this.setState({
+      remotePublicDB: null,
+      remoteDB:       null,
+    })
     
     this.context.main.setState({ loggedIn: false })
   },
