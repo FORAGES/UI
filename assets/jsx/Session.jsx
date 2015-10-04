@@ -5,16 +5,28 @@ var Session = React.createClass({
     remoteDB: null,
   }},
   
+  dbUrl(name)    { return "http://forages-db.ilvain.com:5984/" + name },
+  dbCreate(name) { return new PouchDB(this.dbUrl(name), { skipSetup: true }) },
+  
   logIn: function(username, password, onSuccess, onError) {
-    var dbUrl = "http://forages-db.ilvain.com:5984/" + username
-    var db = new PouchDB(dbUrl, { skipSetup: true })
+    var appName = "forages"
     
-    db.login(username, password).then(function (user) {
-      this.setState({ remoteDB: db })
-      this.context.main.setState({ loggedIn: true })
-      
-      onSuccess()
-    }.bind(this)).catch(function (error) {
+    // Log in to central _users database.
+    var usersDB = this.dbCreate("_users")
+    usersDB.login(username, password).then(user => {
+      // Get user info for this user from the _users database.
+      return usersDB.get("org.couchdb.user:" + username).then(userInfo => {
+        // Log in to this user's private database for this application.
+        var privateDB = this.dbCreate(userInfo[appName].dbname)
+        return privateDB.login(username, password).then(user => {
+          // Save the database handle and mark as logged in.
+          this.setState({ remoteDB: privateDB })
+          this.context.main.setState({ loggedIn: true })
+          
+          onSuccess()
+        })
+      })
+    }).catch(error => {
       console.error(error)
       
       onError(error)
