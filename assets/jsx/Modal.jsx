@@ -4,6 +4,22 @@ var Modal = {}
 Modal.LogIn = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
+  componentDidMount() {
+    $(document.body).on('keydown', this.onKeyDown)
+    
+    if (this.refs.username)
+      this.refs.username.getDOMNode().focus()
+  },
+  
+  componentWillUnmount() {
+    $(document.body).off('keydown', this.onKeyDown)
+  },
+  
+  onKeyDown(e) {
+    if (e.key == "Escape")
+      this.context.main.setState({ modalLogIn: false })
+  },
+  
   onLogIn(e) {
     e.preventDefault()
     
@@ -36,8 +52,8 @@ Modal.LogIn = React.createClass({
           <div className="dialog-body-div">
             <input ref="username" type="text"     placeholder="U S E R N A M E" />
             <input ref="password" type="password" placeholder="P A S S W O R D" />
-            <button type="submit" value="login">          <p>L O G I N</p></button>
-            <button type="button" onClick={this.onCancel}><p>C A N C E L</p></button>
+            <button ref="login"  type="submit" value="login">          <p>L O G I N</p></button>
+            <button ref="cancel" type="button" onClick={this.onCancel}><p>C A N C E L</p></button>
           </div>
         </form>
       </div>
@@ -47,6 +63,22 @@ Modal.LogIn = React.createClass({
 
 Modal.LogOut = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
+  
+  componentDidMount() {
+    $(document.body).on('keydown', this.onKeyDown)
+    
+    if (this.refs.logOut)
+      this.refs.logOut.getDOMNode().focus()
+  },
+  
+  componentWillUnmount() {
+    $(document.body).off('keydown', this.onKeyDown)
+  },
+  
+  onKeyDown(e) {
+    if (e.key == "Escape")
+      this.context.main.setState({ modalLogOut: false })
+  },
   
   onLogOut(e) {
     this.context.main.refs.session.logOut()
@@ -64,8 +96,8 @@ Modal.LogOut = React.createClass({
           <h3><span className="dim">L O G</span>{" O U T "}<span className="dim">?</span></h3>
         </div>
         <div className="dialog-body-div">
-          <button type="button" onClick={this.onLogOut}><p>L O G O U T</p></button>
-          <button type="button" onClick={this.onCancel}><p>C A N C E L</p></button>
+          <button type="button" ref="logOut" onClick={this.onLogOut}><p>L O G O U T</p></button>
+          <button type="button" ref="cancel" onClick={this.onCancel}><p>C A N C E L</p></button>
         </div>
       </div>
     </div>)
