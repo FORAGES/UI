@@ -6,6 +6,10 @@ var Map = React.createClass({
     this.createMap()
   },
   
+  getInitialState() { return {
+    markers: {},
+  }},
+  
   createMap(element) {
     L.Icon.Default.imagePath = "css/images"
     
@@ -64,8 +68,9 @@ var Map = React.createClass({
     this.map.setView([appState.mapLat, appState.mapLon], appState.mapZoom)
     
     // Set up event handler hooks.
-    this.map.on('moveend',         this.onMoveEnd)
-    this.map.on('baselayerchange', this.onBaseLayerChange)
+    this.map.on("moveend",         this.onMoveEnd)
+    this.map.on("baselayerchange", this.onBaseLayerChange)
+    this.map.on("contextmenu",     this.onContextMenu)
   },
   
   onMoveEnd(e) {
@@ -82,7 +87,89 @@ var Map = React.createClass({
     this.context.main.setState({ mapLayer: e.layer.shortName })
   },
   
+  onContextMenu(e) {
+    var geohash = Geohash.encode(e.latlng.lat, e.latlng.lng, 10)
+    this.openMarker(geohash)
+  },
+  
+  openMarker(geohash) {
+    var marker = this.state.markers[geohash]
+    if (!marker)
+      this.createMarker(geohash)
+  },
+  
+  createMarker(geohash) {
+    var pos = Geohash.decode(geohash)
+    
+    this.state.markers[geohash] = { lat: pos.lat, lon: pos.lon, info: null }
+    this.setState({ markers: this.state.markers })
+  },
+  
   render() {
-    return (<div className="map"></div>)
+    var markers = []
+    for (var geohash in this.state.markers) {
+      var content = (<div>New marker setup...</div>)
+      var props = this.state.markers[geohash]
+      markers.push(<Map.Marker key={geohash} content={content}
+                               map={this.map} {...props} />)
+    }
+    
+    return (<div className="map">{markers}</div>)
   }
+})
+
+Map.Marker = React.createClass({
+  componentDidMount()    { this.createMarker(this.props) },
+  componentWillUnmount() { this.removeMarker(this.props) },
+  
+  componentWillReceiveProps(nextProps) {
+    if (this.props.map !== nextProps.map) {
+      this.deleteMarker(this.props)
+      this.createMarker(nextProps)
+    } else {
+      if (this.props.lat !== nextProps.lat) {
+        this.leafletMarker.lat = nextProps.lat
+        this.leafletMarker.update()
+      }
+      if (this.props.lon !== nextProps.lon) {
+        this.leafletMarker.lon = nextProps.lon
+        this.leafletMarker.update()
+      }
+      if (this.props.content !== nextProps.content) {
+        if (!nextProps.content)
+          this.leafletMarker.unbindPopup()
+        else
+        if (!this.props.content)
+          this.leafletMarker.bindPopup(this.renderPopup(nextProps.content))
+        else
+          this.leafletMarker.setPopupContent(this.renderPopup(nextProps.content))
+      }
+    }
+  },
+  
+  createMarker(props) {
+    this.leafletMarker = L.marker([this.props.lat, this.props.lon])
+    this.leafletMarker.addTo(props.map)
+    
+    if (props.content) {
+      this.leafletMarker.bindPopup(this.renderPopup(props.content))
+      
+      // If there is no data, show the content to help the user create data.
+      // TODO: remove this and use a passed-in prop instead.
+      if (!props.data)
+        this.leafletMarker.openPopup()
+    }
+  },
+  
+  deleteMarker(props) {
+    if (this.leafletMarker) {
+      props.map.removeLayer(this.leafletMarker)
+      this.leafletMarker = null
+    }
+  },
+  
+  // TODO: try to find a way to use React.render here instead.
+  renderPopup(content) { return React.renderToString(content) },
+  
+  render() { return null }
 })
