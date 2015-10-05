@@ -1,5 +1,7 @@
 vendor/*.js
 vendor/*.css
 vendor/*.ttf
+vendor/*.zip
+vendor/images
 dist
 dist-min

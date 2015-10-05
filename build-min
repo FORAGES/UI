@@ -13,6 +13,10 @@ dist/css/%.ttf => dist-min/css/%.ttf
   mkdir -p `dirname $1`
   cp $INPUT $1
 
+dist/css/images/%.png => dist-min/css/images/%.png
+  mkdir -p `dirname $1`
+  cp $INPUT $1
+
 dist/index.html => dist-min/index.html
   mkdir -p `dirname $1`
   cp $INPUT $1

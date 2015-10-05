@@ -17,6 +17,10 @@ vendor/%.css => dist/css/%.css
 vendor/%.ttf => dist/css/%.ttf
   cp $INPUT $1
 
+vendor/images/%.png => dist/css/images/%.png
+  mkdir -p `dirname $1`
+  cp $INPUT $1
+
 assets/index.html => dist/index.html
   cp $INPUT $1
 

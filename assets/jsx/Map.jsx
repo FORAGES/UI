@@ -7,6 +7,8 @@ var Map = React.createClass({
   },
   
   createMap(element) {
+    L.Icon.Default.imagePath = "css/images"
+    
     this.map = L.map(this.getDOMNode(), { doubleClickZoom: false })
     
     var layer_osm = name =>

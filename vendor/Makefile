@@ -32,13 +32,21 @@ pouchdb-${POUCHDB_VERSION}.js:
 pouchdb-authentication-${POUCHDB_AUTH_VERSION}.js:
 	wget -O $@ https://raw.githubusercontent.com/nolanlawson/pouchdb-authentication/v${POUCHDB_AUTH_VERSION}/dist/pouchdb.authentication.js
 
-leaflet: leaflet-${LEAFLET_VERSION}.js leaflet-${LEAFLET_VERSION}.css
+leaflet: leaflet-${LEAFLET_VERSION}.js leaflet-${LEAFLET_VERSION}.css images
 
-leaflet-${LEAFLET_VERSION}.js:
-	wget -O $@ http://cdn.leafletjs.com/leaflet-${LEAFLET_VERSION}/leaflet.js
+leaflet-${LEAFLET_VERSION}.zip:
+	wget http://cdn.leafletjs.com/downloads/leaflet-${LEAFLET_VERSION}.zip
 
-leaflet-${LEAFLET_VERSION}.css:
-	wget -O $@ http://cdn.leafletjs.com/leaflet-${LEAFLET_VERSION}/leaflet.css
+leaflet-${LEAFLET_VERSION}.js: leaflet-${LEAFLET_VERSION}.zip
+	unzip -o leaflet-${LEAFLET_VERSION}.zip leaflet.js
+	mv leaflet.js leaflet-${LEAFLET_VERSION}.js
+
+leaflet-${LEAFLET_VERSION}.css: leaflet-${LEAFLET_VERSION}.zip
+	unzip -o leaflet-${LEAFLET_VERSION}.zip leaflet.css
+	mv leaflet.css leaflet-${LEAFLET_VERSION}.css
+
+images: leaflet-${LEAFLET_VERSION}.zip
+	unzip -o leaflet-${LEAFLET_VERSION}.zip images/*
 
 geohash: geohash-${GEOHASH_VERSION}.js
 
