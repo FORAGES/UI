@@ -2,18 +2,32 @@
 var Session = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   getInitialState() { return {
-    remotePublicDB: null,
+    localDB:        null,
     remoteDB:       null,
+    remotePublicDB: null,
   }},
   
-  componentDidMount() { this.checkIfLoggedIn() },
+  componentDidMount() {
+    this.createLocalDB()
+    this.checkIfLoggedIn()
+  },
   
   appName()      { return "forages" },
   dbUrl(name)    { return "http://forages-db.ilvain.com:5984/" + name },
-  dbCreate(name) { return new PouchDB(this.dbUrl(name), { skipSetup: true }) },
+  dbRemote(name) { return new PouchDB(this.dbUrl(name), { skipSetup: true }) },
+  dbLocal(name)  { return new PouchDB(name,             { skipSetup: true }) },
+  
+  createLocalDB() {
+    var db = this.dbLocal(this.appName())
+    this.setState({ localDB: db })
+    
+    db.info().catch(error => {
+      console.error(error)
+    })
+  },
   
   checkIfLoggedIn() {
-    var publicDB = this.dbCreate(this.appName() + "_public")
+    var publicDB = this.dbRemote(this.appName() + "_public")
     publicDB.getSession().then(res => {
       // Continue only if prior session exists
       var username = res.userCtx.name
@@ -22,7 +36,7 @@ var Session = React.createClass({
       // Get user info for this user.
       return publicDB.getUser(username).then(userInfo => {
         // Log in to this user's private database for this application.
-        var privateDB = this.dbCreate(userInfo[this.appName()].dbname)
+        var privateDB = this.dbRemote(userInfo[this.appName()].dbname)
         return privateDB.getSession().then(res => {
           // Continue only if prior session exists and is for the same user.
           if (res.userCtx.name !== username) return
@@ -39,12 +53,12 @@ var Session = React.createClass({
   
   logIn(username, password, onSuccess, onError) {
     // Log in to the public database for this application.
-    var publicDB = this.dbCreate(this.appName() + "_public")
+    var publicDB = this.dbRemote(this.appName() + "_public")
     publicDB.logIn(username, password).then(user => {
       // Get user info for this user.
       return publicDB.getUser(username).then(userInfo => {
         // Log in to this user's private database for this application.
-        var privateDB = this.dbCreate(userInfo[this.appName()].dbname)
+        var privateDB = this.dbRemote(userInfo[this.appName()].dbname)
         return privateDB.logIn(username, password).then(user => {
           // Save the database handles and mark as logged in.
           this.setState({ remotePublicDB: publicDB, remoteDB: privateDB })
