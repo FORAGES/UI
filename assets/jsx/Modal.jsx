@@ -50,8 +50,8 @@ Modal.LogIn = React.createClass({
         </div>
         <form onSubmit={this.onLogIn}>
           <div className="dialog-body-div">
-            <input ref="username" type="text"     placeholder="U S E R N A M E" />
-            <input ref="password" type="password" placeholder="P A S S W O R D" />
+            <input ref="username" type="text"     placeholder="U S E R N A M E" className="modal"/>
+            <input ref="password" type="password" placeholder="P A S S W O R D" className="modal"/>
             <button ref="login"  type="submit" value="login">          <p>L O G I N</p></button>
             <button ref="cancel" type="button" onClick={this.onCancel}><p>C A N C E L</p></button>
           </div>
