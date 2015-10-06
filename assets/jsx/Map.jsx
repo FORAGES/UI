@@ -120,7 +120,7 @@ var Map = React.createClass({
 
 Map.Marker = React.createClass({
   componentDidMount()    { this.createMarker(this.props) },
-  componentWillUnmount() { this.removeMarker(this.props) },
+  componentWillUnmount() { this.deleteMarker(this.props) },
   
   componentWillReceiveProps(nextProps) {
     if (this.props.map !== nextProps.map) {
@@ -135,30 +135,42 @@ Map.Marker = React.createClass({
         this.leafletMarker.lon = nextProps.lon
         this.leafletMarker.update()
       }
-      if (this.props.content !== nextProps.content) {
-        if (!nextProps.content)
+      if (this.props.children !== nextProps.children) {
+        if (!nextProps.children)
           this.leafletMarker.unbindPopup()
         else
-        if (!this.props.content)
-          this.leafletMarker.bindPopup(this.renderPopup(nextProps.content))
-        else
-          this.leafletMarker.setPopupContent(this.renderPopup(nextProps.content))
+        if (!this.props.children)
+          this.leafletMarker.bindPopup()
+        
+        if (!this.props.children)
+          this.leafletMarker.setPopupContent(this.updatePopup(nextProps.children))
+      }
+      if (this.props.onLoseFocus !== nextProps.onLoseFocus) {
+        if (this.props.onLoseFocus)
+          this.leafletMarker.off("popupclose", this.props.onLoseFocus)
+        if (nextProps.onLoseFocus)
+          this.leafletMarker.on("popupclose", nextProps.onLoseFocus)
       }
     }
+    
+    if (nextProps.forceOpen)
+      this.leafletMarker.openPopup()
   },
   
   createMarker(props) {
     this.leafletMarker = L.marker([this.props.lat, this.props.lon])
     this.leafletMarker.addTo(props.map)
     
-    if (props.content) {
-      this.leafletMarker.bindPopup(this.renderPopup(props.content))
-      
-      // If there is no data, show the content to help the user create data.
-      // TODO: remove this and use a passed-in prop instead.
-      if (!props.data)
-        this.leafletMarker.openPopup()
+    if (props.children) {
+      this.leafletMarker.bindPopup()
+      this.updatePopup(props.children)
     }
+    
+    if (props.forceOpen)
+      this.leafletMarker.openPopup()
+    
+    if (props.onLoseFocus)
+      this.leafletMarker.on("popupclose", props.onLoseFocus)
   },
   
   deleteMarker(props) {
@@ -168,8 +180,12 @@ Map.Marker = React.createClass({
     }
   },
   
-  // TODO: try to find a way to use React.render here instead.
-  renderPopup(content) { return React.renderToString(content) },
+  updatePopup(content) {
+    var contentDiv = document.createElement("div")
+    React.render(React.Children.only(content), contentDiv)
+    
+    this.leafletMarker.setPopupContent(contentDiv)
+  },
   
   render() { return null }
 })
