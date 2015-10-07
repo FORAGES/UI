@@ -8,6 +8,7 @@ var Map = React.createClass({
   
   getInitialState() { return {
     markers: {},
+    premarker: null,
   }},
   
   createMap(element) {
@@ -99,19 +100,44 @@ var Map = React.createClass({
   },
   
   createMarker(geohash) {
+    this.setState({ premarker: geohash })
+  },
+  
+  saveMarker(geohash, info) {
     var pos = Geohash.decode(geohash)
     
-    this.state.markers[geohash] = { lat: pos.lat, lon: pos.lon, info: null }
+    this.state.markers[geohash] = { lat: pos.lat, lon: pos.lon, info: info }
     this.setState({ markers: this.state.markers })
+  },
+  
+  savePremarker(info) {
+    this.saveMarker(this.state.premarker, info)
+    this.clearPreMarker()
+  },
+  
+  clearPreMarker() {
+    this.setState({ premarker: null })
   },
   
   render() {
     var markers = []
     for (var geohash in this.state.markers) {
-      var content = (<div>New marker setup...</div>)
       var props = this.state.markers[geohash]
-      markers.push(<Map.Marker key={geohash} content={content}
-                               map={this.map} {...props} />)
+      
+      markers.push(<Map.Marker key={geohash} map={this.map} {...props}>
+        <Content.ExistingMarker key={geohash+":content"} {...props}/>
+      </Map.Marker>)
+    }
+    
+    if (this.state.premarker) {
+      var geohash = this.state.premarker
+      var pos = Geohash.decode(geohash)
+      
+      markers.push(<Map.Marker key={geohash} map={this.map}
+                               lat={pos.lat} lon={pos.lon}
+                               forceOpen={true} onLoseFocus={this.clearPreMarker}>
+        <Form.CreateMarker key={geohash+":form"} onSave={this.savePremarker} />
+      </Map.Marker>)
     }
     
     return (<div className="map">{markers}</div>)
@@ -139,10 +165,12 @@ Map.Marker = React.createClass({
         if (!nextProps.children)
           this.leafletMarker.unbindPopup()
         else
-        if (!this.props.children)
+        if (!this.props.children) {
           this.leafletMarker.bindPopup()
-        
-        if (!this.props.children)
+          this.leafletMarker.setPopupContent(this.updatePopup(nextProps.children))
+        }
+        else
+        if (this.props.children.key !== nextProps.children.key)
           this.leafletMarker.setPopupContent(this.updatePopup(nextProps.children))
       }
       if (this.props.onLoseFocus !== nextProps.onLoseFocus) {
