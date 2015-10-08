@@ -15,46 +15,44 @@ fonts: LiberationSerif-Regular.ttf
 LiberationSerif-Regular.ttf:
 	cp /usr/share/fonts/liberation/LiberationSerif-Regular.ttf $@ # TODO: be more robust than this.
 
-jquery: jquery-${JQUERY_VERSION}.js
+jquery: jquery.js
 
-jquery-${JQUERY_VERSION}.js:
+jquery.js:
 	wget -O $@ http://code.jquery.com/jquery-${JQUERY_VERSION}.js
 
-react: react-${REACT_VERSION}.js
+react: react.js
 
-react-${REACT_VERSION}.js:
+react.js:
 	wget -O $@ https://fb.me/react-${REACT_VERSION}.js
 
-immutable: immutable-${IMMUTABLE_VERSION}.js
+immutable: immutable.js
 
-immutable-${IMMUTABLE_VERSION}.js:
+immutable.js:
 	wget -O $@ https://raw.githubusercontent.com/facebook/immutable-js/${IMMUTABLE_VERSION}/dist/immutable.js
 
-pouchdb: pouchdb-${POUCHDB_VERSION}.js pouchdb-authentication-${POUCHDB_AUTH_VERSION}.js
+pouchdb: pouchdb.js pouchdb-authentication.js
 
-pouchdb-${POUCHDB_VERSION}.js:
+pouchdb.js:
 	wget -O $@ https://github.com/pouchdb/pouchdb/releases/download/${POUCHDB_VERSION}/pouchdb-${POUCHDB_VERSION}.js
 
-pouchdb-authentication-${POUCHDB_AUTH_VERSION}.js:
+pouchdb-authentication.js:
 	wget -O $@ https://raw.githubusercontent.com/nolanlawson/pouchdb-authentication/v${POUCHDB_AUTH_VERSION}/dist/pouchdb.authentication.js
 
-leaflet: leaflet-${LEAFLET_VERSION}.js leaflet-${LEAFLET_VERSION}.css images
+leaflet: leaflet.js leaflet.css images
 
-leaflet-${LEAFLET_VERSION}.zip:
-	wget http://cdn.leafletjs.com/downloads/leaflet-${LEAFLET_VERSION}.zip
+leaflet.zip:
+	wget -O $@ http://cdn.leafletjs.com/downloads/leaflet-${LEAFLET_VERSION}.zip
 
-leaflet-${LEAFLET_VERSION}.js: leaflet-${LEAFLET_VERSION}.zip
-	unzip -o leaflet-${LEAFLET_VERSION}.zip leaflet.js
-	mv leaflet.js leaflet-${LEAFLET_VERSION}.js
+leaflet.js: leaflet.zip
+	unzip -o leaflet.zip $@
 
-leaflet-${LEAFLET_VERSION}.css: leaflet-${LEAFLET_VERSION}.zip
-	unzip -o leaflet-${LEAFLET_VERSION}.zip leaflet.css
-	mv leaflet.css leaflet-${LEAFLET_VERSION}.css
+leaflet.css: leaflet.zip
+	unzip -o leaflet.zip $@
 
-images: leaflet-${LEAFLET_VERSION}.zip
-	unzip -o leaflet-${LEAFLET_VERSION}.zip images/*
+images: leaflet.zip
+	unzip -o leaflet.zip $@/*
 
-geohash: geohash-${GEOHASH_VERSION}.js
+geohash: geohash.js
 
-geohash-${GEOHASH_VERSION}.js:
+geohash.js:
 	wget -O $@ https://raw.githubusercontent.com/chrisveness/latlon-geohash/v${GEOHASH_VERSION}/latlon-geohash.js
