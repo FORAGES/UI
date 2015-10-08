@@ -1,13 +1,14 @@
 
 JQUERY_VERSION=2.1.4
 REACT_VERSION=0.13.3
+IMMUTABLE_VERSION=3.7.5
 POUCHDB_VERSION=4.0.3
 POUCHDB_AUTH_VERSION=0.4.2
 LEAFLET_VERSION=0.7.5
 GEOHASH_VERSION=1.0.1
 
-all:    fonts jquery react pouchdb leaflet geohash
-.PHONY: fonts jquery react pouchdb leaflet geohash
+all:    fonts jquery react immutable pouchdb leaflet geohash
+.PHONY: fonts jquery react immutable pouchdb leaflet geohash
 
 fonts: LiberationSerif-Regular.ttf
 
@@ -23,6 +24,11 @@ react: react-${REACT_VERSION}.js
 
 react-${REACT_VERSION}.js:
 	wget -O $@ https://fb.me/react-${REACT_VERSION}.js
+
+immutable: immutable-${IMMUTABLE_VERSION}.js
+
+immutable-${IMMUTABLE_VERSION}.js:
+	wget -O $@ https://raw.githubusercontent.com/facebook/immutable-js/${IMMUTABLE_VERSION}/dist/immutable.js
 
 pouchdb: pouchdb-${POUCHDB_VERSION}.js pouchdb-authentication-${POUCHDB_AUTH_VERSION}.js
 
