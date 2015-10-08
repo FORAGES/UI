@@ -1,13 +1,7 @@
 
-var Session = React.createClass({
-  contextTypes: { main: React.PropTypes.any.isRequired },
-  getInitialState() { return {
-    localDB:        null,
-    remoteDB:       null,
-    remotePublicDB: null,
-  }},
-  
-  componentDidMount() {
+var Session = {
+  init(main) {
+    this.main = main
     this.createLocalDB()
     this.checkIfLoggedIn()
   },
@@ -19,7 +13,7 @@ var Session = React.createClass({
   
   createLocalDB() {
     var db = this.dbLocal(this.appName())
-    this.setState({ localDB: db })
+    this.localDB = db
     
     db.info().catch(error => {
       console.error(error)
@@ -42,8 +36,9 @@ var Session = React.createClass({
           if (res.userCtx.name !== username) return
           
           // Save the database handles and mark as logged in.
-          this.setState({ remotePublicDB: publicDB, remoteDB: privateDB })
-          this.context.main.setState({ loggedIn: true })
+          this.remoteDB       = privateDB
+          this.remotePublicDB = publicDB
+          this.main.setState({ loggedIn: true })
         })
       })
     }).catch(error => {
@@ -61,8 +56,9 @@ var Session = React.createClass({
         var privateDB = this.dbRemote(userInfo[this.appName()].dbname)
         return privateDB.logIn(username, password).then(user => {
           // Save the database handles and mark as logged in.
-          this.setState({ remotePublicDB: publicDB, remoteDB: privateDB })
-          this.context.main.setState({ loggedIn: true })
+          this.remoteDB       = privateDB
+          this.remotePublicDB = publicDB
+          this.main.setState({ loggedIn: true })
           
           onSuccess()
         })
@@ -75,16 +71,11 @@ var Session = React.createClass({
   },
   
   logOut() {
-    if (this.state.remotePublicDB) this.state.remotePublicDB.logOut()
-    if (this.state.remoteDB)       this.state.remoteDB.logOut()
+    if (this.remotePublicDB) this.remotePublicDB.logOut()
+    if (this.remoteDB)       this.remoteDB.logOut()
     
-    this.setState({
-      remotePublicDB: null,
-      remoteDB:       null,
-    })
-    
-    this.context.main.setState({ loggedIn: false })
+    this.remotePublicDB = null
+    this.remoteDB       = null
+    this.main.setState({ loggedIn: false })
   },
-  
-  render() { return null }
-})
+}

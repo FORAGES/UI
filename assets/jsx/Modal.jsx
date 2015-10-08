@@ -26,11 +26,9 @@ Modal.LogIn = React.createClass({
     var usernameNode = React.findDOMNode(this.refs.username)
     var passwordNode = React.findDOMNode(this.refs.password)
     
-    var main = this.context.main
-    
-    main.refs.session.logIn(usernameNode.value, passwordNode.value, ()=> {
+    Session.logIn(usernameNode.value, passwordNode.value, ()=> {
       // On success, hide the dialog and mark as logged in.
-      main.setState({ modalLogIn: false, loggedIn: true })
+      this.context.main.setState({ modalLogIn: false, loggedIn: true })
     }, error => {
       // On error, reset the fields to indicate the user should try again.
       usernameNode.value = ""
@@ -81,7 +79,7 @@ Modal.LogOut = React.createClass({
   },
   
   onLogOut(e) {
-    this.context.main.refs.session.logOut()
+    Session.logOut()
     this.context.main.setState({ modalLogOut: false })
   },
   
