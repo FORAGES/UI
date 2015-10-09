@@ -29,15 +29,28 @@ var Menu = React.createClass({
       this.setState({ hintActive: false })
   },
   
+  titleMap: {
+    forages:   ["F O R", "A G E S"],
+    explore:   ["E X P", "L O R E"],
+    research:  ["R E", "S E A R C H"],
+    recollect: ["R E", "C O L L E C T"],
+    inverse:   ["I N", "V E R S E"],
+    logout:    ["L O G", "O U T"],
+    login:     [" L O G", "I N "], // extra spaces because of fewer letters.
+  },
+  
   render() {
     return (<div className="menu" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-      <Menu.Title texts={["F O R","A G E S"]} active={!this.state.drawerActive}/>
+      <Menu.Title texts={this.titleMap.forages}
+                  active={!this.state.drawerActive}/>
       {this.render_hint()}
       {this.render_drawer()}
     </div>)
   },
   
   render_drawer() {
+    var mode = this.context.main.state.mode
+    
     return (<div style={{ width: "100vw", display: "flex",
                           opacity: this.state.drawerActive ? 1 : 0,
                           top: this.state.drawerActive ? 0 : -100,
@@ -53,7 +66,8 @@ var Menu = React.createClass({
       <Menu.Spacer width="0.5em" />
       
       <div style={{ flex: "0 0 auto" }}>
-        <Menu.Title texts={["E X P","L O R E"]} active={!this.state.hintActive}/>
+        <Menu.Title texts={this.titleMap[mode]}
+                    active={!this.state.hintActive}/>
       </div>
       
       <Menu.Spacer width="0.5em" />
@@ -70,20 +84,14 @@ var Menu = React.createClass({
   },
   
   render_hint() {
-    var hint_texts = []
-    if      (this.state.hint === "inverse")   hint_texts = ["I N", "V E R S E"]
-    else if (this.state.hint === "research")  hint_texts = ["R E", "S E A R C H"]
-    else if (this.state.hint === "recollect") hint_texts = ["R E", "C O L L E C T"]
-    else if (this.state.hint === "logout")    hint_texts = ["L O G", "O U T"]
-    else if (this.state.hint === "login")     hint_texts = [" L O G", "I N "]
-    
     return (<div style={{ width: "100vw", display: "flex",
                           opacity: this.state.hintActive ? 1 : 0,
                           top: this.state.hintActive ? 0 : -100,
                           position: "absolute",
                           transition: "opacity 1.25s, top 0.5s" }}>
       <div style={{ flex: "1 0 auto" }}>
-        <Menu.Title texts={hint_texts} active={this.state.hintActive}/>
+        <Menu.Title texts={this.titleMap[this.state.hint]}
+                    active={this.state.hintActive}/>
       </div>
     </div>)
   }
