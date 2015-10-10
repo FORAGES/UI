@@ -1,5 +1,4 @@
 
-JQUERY_VERSION=2.1.4
 REACT_VERSION=0.13.3
 IMMUTABLE_VERSION=3.7.5
 POUCHDB_VERSION=4.0.3
@@ -7,18 +6,13 @@ POUCHDB_AUTH_VERSION=0.4.2
 LEAFLET_VERSION=0.7.5
 GEOHASH_VERSION=1.0.1
 
-all:    fonts jquery react immutable pouchdb leaflet geohash
-.PHONY: fonts jquery react immutable pouchdb leaflet geohash
+all:    fonts react immutable pouchdb leaflet geohash
+.PHONY: fonts react immutable pouchdb leaflet geohash
 
 fonts: LiberationSerif-Regular.ttf
 
 LiberationSerif-Regular.ttf:
 	cp /usr/share/fonts/liberation/LiberationSerif-Regular.ttf $@ # TODO: be more robust than this.
-
-jquery: jquery.js
-
-jquery.js:
-	wget -O $@ http://code.jquery.com/jquery-${JQUERY_VERSION}.js
 
 react: react.js
 

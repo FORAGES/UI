@@ -5,14 +5,14 @@ Modal.LogIn = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
   componentDidMount() {
-    $(document.body).on('keydown', this.onKeyDown)
+    document.body.addEventListener("keydown", this.onKeyDown)
     
     if (this.refs.username)
       this.refs.username.getDOMNode().focus()
   },
   
   componentWillUnmount() {
-    $(document.body).off('keydown', this.onKeyDown)
+    document.body.removeEventListener("keydown", this.onKeyDown)
   },
   
   onKeyDown(e) {
@@ -63,14 +63,14 @@ Modal.LogOut = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
   componentDidMount() {
-    $(document.body).on('keydown', this.onKeyDown)
+    document.body.addEventListener("keydown", this.onKeyDown)
     
     if (this.refs.logOut)
       this.refs.logOut.getDOMNode().focus()
   },
   
   componentWillUnmount() {
-    $(document.body).off('keydown', this.onKeyDown)
+    document.body.removeEventListener("keydown", this.onKeyDown)
   },
   
   onKeyDown(e) {

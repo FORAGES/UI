@@ -21,8 +21,8 @@ var ApplicationState = {
     
     for(var i in param_list) {
       var param_parts = param_list[i].split("=")
-      var key   = param_parts[0]
-      var value = param_parts[1]
+      var key   = decodeURIComponent(param_parts[0])
+      var value = decodeURIComponent(param_parts[1])
       
       if     (key === "mode")     state.mode     = value
       else if(key === "invert")   state.invert   = value != 0
@@ -46,6 +46,11 @@ var ApplicationState = {
     if(state.invert)                params.invert   = 1
     if(state.mapLayer != "default") params.mapLayer = state.mapLayer
     
-    window.history.replaceState(null, null, "?"+$.param(params))
+    var queryParams = [];
+    for (var key in params)
+      queryParams.push(encodeURIComponent(key) +
+                 "=" + encodeURIComponent(params[key]))
+    
+    window.history.replaceState(null, null, "?" + queryParams.join("&"))
   }
 }
