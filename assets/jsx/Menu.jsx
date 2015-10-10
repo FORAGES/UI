@@ -20,6 +20,9 @@ var Menu = React.createClass({
       else
       if (name == "logout")
         this.context.main.setState({ modalLogOut: true })
+      else
+      if (name == this.state.hint)
+        this.context.main.setState({ mode: name })
     }
     else
     if (e.type == "mouseover")
@@ -39,6 +42,18 @@ var Menu = React.createClass({
     login:     [" L O G", "I N "], // extra spaces because of fewer letters.
   },
   
+  prevModeMap: {
+    explore:   "research",
+    recollect: "explore",
+    research:  "recollect",
+  },
+  
+  nextModeMap: {
+    explore:   "recollect",
+    recollect: "research",
+    research:  "explore",
+  },
+  
   render() {
     return (<div className="menu" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
       <Menu.Title texts={this.titleMap.forages}
@@ -50,6 +65,8 @@ var Menu = React.createClass({
   
   render_drawer() {
     var mode = this.context.main.state.mode
+    var prevMode = this.prevModeMap[mode]
+    var nextMode = this.nextModeMap[mode]
     
     return (<div style={{ width: "100vw", display: "flex",
                           opacity: this.state.drawerActive ? 1 : 0,
@@ -60,7 +77,7 @@ var Menu = React.createClass({
       <Menu.Icon text={"☯"} name="inverse" callback={this.onIconEvent} />
       <Menu.Spacer />
       
-      <Menu.Icon text={"⚝"} name="research" callback={this.onIconEvent} />
+      <Menu.Icon text={"⚝"} name={nextMode} callback={this.onIconEvent} />
       <Menu.Spacer width="0.5em" />
       <Menu.Icon text={"⇜"} />
       <Menu.Spacer width="0.5em" />
@@ -73,7 +90,7 @@ var Menu = React.createClass({
       <Menu.Spacer width="0.5em" />
       <Menu.Icon text={"⇝"} />
       <Menu.Spacer width="0.5em" />
-      <Menu.Icon text={"⚝"} name="recollect" callback={this.onIconEvent} />
+      <Menu.Icon text={"⚝"} name={prevMode} callback={this.onIconEvent} />
       
       <Menu.Spacer />
       {this.context.main.state.loggedIn ?
