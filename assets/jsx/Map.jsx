@@ -62,6 +62,9 @@ var Map = React.createClass({
     // Add a control to switch layers.
     L.control.layers(layersArg, overlaysArg).addTo(this.map)
     
+    // Add a control to show current location.
+    L.control.gps().addTo(this.map)
+    
     // Use OpenStreetMap as the default layer.
     this.layers[appState.mapLayer].addTo(this.map)
     
@@ -217,3 +220,46 @@ Map.Marker = React.createClass({
   
   render() { return null }
 })
+
+L.Control.GPS = L.Control.extend({
+  options: {
+    position: "topleft",
+    targetText: "⌖",
+    targetTitle: "Geolocation",
+  },
+  
+  onAdd(map) {
+    var div  = L.DomUtil.create("div", "leaflet-control-zoom leaflet-bar")
+    var link = L.DomUtil.create("a", "leaflet-control-zoom-in", div)
+    
+    link.innerHTML = this.options.targetText
+    link.title     = this.options.targetTitle
+    link.href      = "#"
+    
+    var onTarget = e => {
+      map.locate({ setView: true, maxZoom: 16 }) // TODO: use watch: true
+    }
+    
+    L.DomEvent
+      .on(link, 'mousedown dblclick', L.DomEvent.stopPropagation)
+      .on(link, 'click', L.DomEvent.stop)
+      .on(link, 'click', onTarget)
+      .on(link, 'click', this._refocusOnMap)
+    
+    var onLocationFound = e => {
+      var radius = e.accuracy / 2
+      
+      if (this.circle && this.circle.removeFrom)
+        this.circle.removeFrom(map)
+      
+      this.circle = L.circle(e.latlng, radius)
+      this.circle.addTo(map)
+    }
+    
+    map.on('locationfound', onLocationFound)
+    
+    return div
+  },
+})
+
+L.control.gps = options => new L.Control.GPS(options)
