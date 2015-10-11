@@ -1,5 +1,5 @@
 
-var Form = {}
+const Form = {}
 
 Form.CreateMarker = React.createClass({
   componentDidMount() {
@@ -26,16 +26,16 @@ Form.CreateMarker = React.createClass({
   },
   
   numberBox(name, first, last, current, options) {
-    var numbers = []
+    const numbers = []
     for (var i = first; i <= last; i++) {
-      var iText = (i < 10) ? ("0" + i) : ("" + i)
+      const iText = (i < 10) ? ("0" + i) : ("" + i)
       numbers.push(<option key={"name"+iText} value={iText}>{iText}</option>)
     }
     
     if (options && options["reverse"])
       numbers.reverse()
     
-    var currentText = (current < 10) ? ("0" + current) : ("" + current)
+    const currentText = (current < 10) ? ("0" + current) : ("" + current)
     
     return (<select ref={name} className="dialog-body-row-item" defaultValue={currentText}>
       {numbers}
@@ -43,8 +43,8 @@ Form.CreateMarker = React.createClass({
   },
   
   dateBoxes() {
-    var date = new Date()
-    var year = date.getFullYear()
+    const date = new Date()
+    const year = date.getFullYear()
     
     return (<div className="dialog-body-row-div">
       {this.numberBox("forayYear", year - 200, year + 1, year, { reverse: true })}

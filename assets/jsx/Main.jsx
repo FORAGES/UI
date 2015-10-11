@@ -1,5 +1,5 @@
 
-var Main = React.createClass({
+const Main = React.createClass({
   getInitialState() { return ApplicationState.initial() },
   
   componentWillMount() {

@@ -1,5 +1,5 @@
 
-var Modal = {}
+const Modal = {}
 
 Modal.LogIn = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
@@ -23,8 +23,8 @@ Modal.LogIn = React.createClass({
   onLogIn(e) {
     e.preventDefault()
     
-    var usernameNode = React.findDOMNode(this.refs.username)
-    var passwordNode = React.findDOMNode(this.refs.password)
+    const usernameNode = React.findDOMNode(this.refs.username)
+    const passwordNode = React.findDOMNode(this.refs.password)
     
     Session.logIn(usernameNode.value, passwordNode.value, ()=> {
       // On success, hide the dialog and mark as logged in.

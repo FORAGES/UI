@@ -1,5 +1,5 @@
 
-var Map = React.createClass({
+const Map = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
   componentDidMount() {
@@ -16,17 +16,17 @@ var Map = React.createClass({
     
     this.map = L.map(this.getDOMNode(), { doubleClickZoom: false })
     
-    var layer_osm = name =>
+    const layer_osm = name =>
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
       })
     
-    var layer_thunderforest = name =>
+    const layer_thunderforest = name =>
       L.tileLayer('http://{s}.tile.thunderforest.com/'+name+'/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       })
     
-    var layer_mapquest_sat = name =>
+    const layer_mapquest_sat = name =>
       L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
         type: 'sat',
         ext: 'jpg',
@@ -43,10 +43,10 @@ var Map = React.createClass({
       "transport": layer_thunderforest("transport"),
     }
     
-    for (name in this.layers)
+    for (const name in this.layers)
       this.layers[name].shortName = name
     
-    var layersArg = {
+    const layersArg = {
       "OpenStreetMap": this.layers["default"],
       "Satellite":     this.layers["sat"],
       "OpenCycleMap":  this.layers["cycle"],
@@ -55,9 +55,9 @@ var Map = React.createClass({
       "Transport":     this.layers["transport"],
     }
     
-    var appState = this.context.main.state
+    const appState = this.context.main.state
     
-    var overlaysArg = {}
+    const overlaysArg = {}
     
     // Add a control to switch layers.
     L.control.layers(layersArg, overlaysArg).addTo(this.map)
@@ -78,7 +78,7 @@ var Map = React.createClass({
   },
   
   onMoveEnd(e) {
-    var center = e.target.getCenter()
+    const center = e.target.getCenter()
     
     this.context.main.setState({
       mapLat:  center.lat,
@@ -92,12 +92,12 @@ var Map = React.createClass({
   },
   
   onContextMenu(e) {
-    var geohash = Geohash.encode(e.latlng.lat, e.latlng.lng, 10)
+    const geohash = Geohash.encode(e.latlng.lat, e.latlng.lng, 10)
     this.openMarker(geohash)
   },
   
   openMarker(geohash) {
-    var marker = this.state.markers[geohash]
+    const marker = this.state.markers[geohash]
     if (!marker)
       this.createMarker(geohash)
   },
@@ -107,7 +107,7 @@ var Map = React.createClass({
   },
   
   saveMarker(geohash, info) {
-    var pos = Geohash.decode(geohash)
+    const pos = Geohash.decode(geohash)
     
     this.state.markers[geohash] = { lat: pos.lat, lon: pos.lon, info: info }
     this.setState({ markers: this.state.markers })
@@ -123,9 +123,9 @@ var Map = React.createClass({
   },
   
   render() {
-    var markers = []
-    for (var geohash in this.state.markers) {
-      var props = this.state.markers[geohash]
+    const markers = []
+    for (const geohash in this.state.markers) {
+      const props = this.state.markers[geohash]
       
       markers.push(<Map.Marker key={geohash} map={this.map} {...props}>
         <Content.ExistingMarker key={geohash+":content"} {...props}/>
@@ -133,8 +133,8 @@ var Map = React.createClass({
     }
     
     if (this.state.premarker) {
-      var geohash = this.state.premarker
-      var pos = Geohash.decode(geohash)
+      const geohash = this.state.premarker
+      const pos = Geohash.decode(geohash)
       
       markers.push(<Map.Marker key={geohash} map={this.map}
                                lat={pos.lat} lon={pos.lon}
@@ -212,7 +212,7 @@ Map.Marker = React.createClass({
   },
   
   updatePopup(content) {
-    var contentDiv = document.createElement("div")
+    const contentDiv = document.createElement("div")
     React.render(React.Children.only(content), contentDiv)
     
     this.leafletMarker.setPopupContent(contentDiv)
@@ -229,14 +229,14 @@ L.Control.GPS = L.Control.extend({
   },
   
   onAdd(map) {
-    var div  = L.DomUtil.create("div", "leaflet-control-zoom leaflet-bar")
-    var link = L.DomUtil.create("a", "leaflet-control-zoom-in", div)
+    const div  = L.DomUtil.create("div", "leaflet-control-zoom leaflet-bar")
+    const link = L.DomUtil.create("a", "leaflet-control-zoom-in", div)
     
     link.innerHTML = this.options.targetText
     link.title     = this.options.targetTitle
     link.href      = "#"
     
-    var onTarget = e => {
+    const onTarget = e => {
       map.locate({ setView: true, maxZoom: 16 }) // TODO: use watch: true
     }
     
@@ -246,8 +246,8 @@ L.Control.GPS = L.Control.extend({
       .on(link, 'click', onTarget)
       .on(link, 'click', this._refocusOnMap)
     
-    var onLocationFound = e => {
-      var radius = e.accuracy / 2
+    const onLocationFound = e => {
+      const radius = e.accuracy / 2
       
       if (this.circle && this.circle.removeFrom)
         this.circle.removeFrom(map)

@@ -1,5 +1,5 @@
 
-var Session = {
+const Session = {
   init(main) {
     this.main = main
     this.createLocalDB()
@@ -12,7 +12,7 @@ var Session = {
   dbLocal(name)  { return new PouchDB(name,             { skipSetup: true }) },
   
   createLocalDB() {
-    var db = this.dbLocal(this.appName())
+    const db = this.dbLocal(this.appName())
     this.localDB = db
     
     db.info().catch(error => {
@@ -21,16 +21,16 @@ var Session = {
   },
   
   checkIfLoggedIn() {
-    var publicDB = this.dbRemote(this.appName() + "_public")
+    const publicDB = this.dbRemote(this.appName() + "_public")
     publicDB.getSession().then(res => {
       // Continue only if prior session exists
-      var username = res.userCtx.name
+      const username = res.userCtx.name
       if (!username) return
       
       // Get user info for this user.
       return publicDB.getUser(username).then(userInfo => {
         // Log in to this user's private database for this application.
-        var privateDB = this.dbRemote(userInfo[this.appName()].dbname)
+        const privateDB = this.dbRemote(userInfo[this.appName()].dbname)
         return privateDB.getSession().then(res => {
           // Continue only if prior session exists and is for the same user.
           if (res.userCtx.name !== username) return
@@ -48,12 +48,12 @@ var Session = {
   
   logIn(username, password, onSuccess, onError) {
     // Log in to the public database for this application.
-    var publicDB = this.dbRemote(this.appName() + "_public")
+    const publicDB = this.dbRemote(this.appName() + "_public")
     publicDB.logIn(username, password).then(user => {
       // Get user info for this user.
       return publicDB.getUser(username).then(userInfo => {
         // Log in to this user's private database for this application.
-        var privateDB = this.dbRemote(userInfo[this.appName()].dbname)
+        const privateDB = this.dbRemote(userInfo[this.appName()].dbname)
         return privateDB.logIn(username, password).then(user => {
           // Save the database handles and mark as logged in.
           this.remoteDB       = privateDB

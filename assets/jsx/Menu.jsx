@@ -1,5 +1,5 @@
 
-var Menu = React.createClass({
+const Menu = React.createClass({
   contextTypes: { main: React.PropTypes.any.isRequired },
   
   getInitialState() { return {
@@ -64,9 +64,9 @@ var Menu = React.createClass({
   },
   
   render_drawer() {
-    var mode = this.context.main.state.mode
-    var prevMode = this.prevModeMap[mode]
-    var nextMode = this.nextModeMap[mode]
+    const mode = this.context.main.state.mode
+    const prevMode = this.prevModeMap[mode]
+    const nextMode = this.nextModeMap[mode]
     
     return (<div style={{ width: "100vw", display: "flex",
                           opacity: this.state.drawerActive ? 1 : 0,
@@ -147,16 +147,16 @@ Menu.Icon = React.createClass({
 
 Menu.Title = React.createClass({
   render() {
-    var texts = this.props.texts || []
+    const texts = this.props.texts || []
     
-    var divs = []
+    const divs = []
     var dim = true
-    for (var i in texts) {
-      var text = texts[i]
+    for (const i in texts) {
+      const text = texts[i]
       if (text.length > 0) {
-        var chars = texts[i].split(" ")
-        for (var j in chars) {
-          var key = "-" + i + "-" + j // Each child needs a unique deterministic key.
+        const chars = texts[i].split(" ")
+        for (const j in chars) {
+          const key = "-" + i + "-" + j // Each child needs a unique deterministic key.
           divs.push(<h2 key={key} className={dim ? "dim" : ""}>{chars[j]}</h2>)
         }
       }

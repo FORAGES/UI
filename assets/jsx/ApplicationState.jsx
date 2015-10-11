@@ -1,5 +1,5 @@
 
-var ApplicationState = {
+const ApplicationState = {
   defaults() {
     return {
       mode:     "explore",
@@ -15,14 +15,14 @@ var ApplicationState = {
     }
   },
   
-  initial(state) {
-    var state = this.defaults()
-    var param_list = window.location.search.slice(0).substring(1).split("&")
+  initial() {
+    const state = this.defaults()
+    const param_list = window.location.search.slice(0).substring(1).split("&")
     
-    for(var i in param_list) {
-      var param_parts = param_list[i].split("=")
-      var key   = decodeURIComponent(param_parts[0])
-      var value = decodeURIComponent(param_parts[1])
+    for(const i in param_list) {
+      const param_parts = param_list[i].split("=")
+      const key   = decodeURIComponent(param_parts[0])
+      const value = decodeURIComponent(param_parts[1])
       
       if     (key === "mode")     state.mode     = value
       else if(key === "invert")   state.invert   = value != 0
@@ -36,7 +36,7 @@ var ApplicationState = {
   },
   
   save(state) {
-    var params = {
+    const params = {
       mode:    state.mode,
       mapLat:  state.mapLat,
       mapLon:  state.mapLon,
@@ -46,8 +46,8 @@ var ApplicationState = {
     if(state.invert)                params.invert   = 1
     if(state.mapLayer != "default") params.mapLayer = state.mapLayer
     
-    var queryParams = [];
-    for (var key in params)
+    const queryParams = [];
+    for (const key in params)
       queryParams.push(encodeURIComponent(key) +
                  "=" + encodeURIComponent(params[key]))
     

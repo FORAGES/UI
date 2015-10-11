@@ -1,10 +1,10 @@
 
-var Content = {}
+const Content = {}
 
 Content.ExistingMarker = React.createClass({
   render() {
-    var date = this.props.info.foray.date
-    var formattedDate = date.slice(0,4) + "-" + date.slice(4,6) + "-" + date.slice(6,8)
+    const date = this.props.info.foray.date
+    const formattedDate = date.slice(0,4) + "-" + date.slice(4,6) + "-" + date.slice(6,8)
     
     return (<div className="dialog-body-div">
       <h3>{this.props.info.place.name}</h3>
